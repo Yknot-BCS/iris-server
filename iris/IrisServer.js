@@ -3,7 +3,8 @@
 // maybe need a new file to run, think about easiest way for a sysadmin to run this, they should be able to 
 // configure ports without creating a javascript file
 
-const MessageRouter = require('../routing/MessageRouter')
+//const MessageRouter = require('../routing/MessageRouter')
+const { PostListener } = require('../index')
 const optionsDef = require('./IrisOptions')
 const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage')
@@ -16,9 +17,12 @@ if (options.help) {
 }
 
 const chronicleListenerPort = options['chronicle-port']
-const clientListenerPort = isNaN(options['web-port']) ? 8880 : options['web-port']
-let mr = new MessageRouter(chronicleListenerPort, clientListenerPort)
-mr.start()
+const webport = isNaN(options['web-port']) ? 8080 : options['web-port']
+//const clientListenerPort = isNaN(options['web-port']) ? 8880 : options['web-port']
+//let mr = new MessageRouter(chronicleListenerPort)
+//mr.start()
+let pl = new PostListener(chronicleListenerPort, webport)
+pl.start()
 
 process.once('SIGINT', function (code) {
     console.log('\nSIGINT received...');

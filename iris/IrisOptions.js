@@ -14,22 +14,22 @@ const opts = [
     {
         name: 'web-port', alias: 'w',
         type: Number,
-        description: "The port that will be exposed to the web for incoming websocket clients (default 8880).",
-        defaultValue: 8880
+        description: "The port that will be exposed to the web for incoming posts (default 8080).",
+        defaultValue: 8080
     }
 ]
 
 const usage = [
     {
         header: 'Iris Server',
-        content: 'A web socket EOSIO streaming service'
+        content: 'A webserver handling EOSIO watcher services'
     },
     {
         header: 'Options',
         optionList: opts
     },
     {
-        content: 'Project home: {underline https://github.com/CALEOS/iris-server}'
+        content: 'Project home: {underline https://github.com/eoszaio/iris-server}'
     }
 ]
 

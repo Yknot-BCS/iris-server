@@ -7,19 +7,15 @@ const axios = require('axios')
 
 class PostListener {
 
-  constructor(port = 8080) {
+  constructor(chronicleport = 8800,  webport = 8080) {
     console.log("PostListener constructor called")
       this.app = express();
       this.app.use(bodyParser.urlencoded({extended: false}))
       this.app.use(bodyParser.json())
-      this.port = port
-      this.mr = new MessageRouter()
+      this.port = webport
+      this.mr = new MessageRouter(chronicleport)
       this.chain_id = '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-      
       this.subscriptions = {}
-      this.requests = {}
-      this.rpcId = 0
-    
   }
 
   start() {

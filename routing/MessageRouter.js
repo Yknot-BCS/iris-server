@@ -22,7 +22,6 @@ class MessageRouter {
             return
 
         let subscriptions = this.channels[message.getChannel()][message.getTopic()]
-        //console.log(subscriptions)
 
         if (!subscriptions)
             return
