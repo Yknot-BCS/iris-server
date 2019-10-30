@@ -34,4 +34,26 @@ axios.post('http://127.0.0.1:8080/addSubscritpion',  { account: 'coolxtestwlt' }
     console.error("error")
   })
 
+  axios.post('http://127.0.0.1:8080/addSubscritpion',  { account: 'coolxtestwlt' } )
+  .then((res) => {
+    console.log(`statusCode: ${res.data}`)
+  })
+  .catch((error) => {
+    console.error("error")
+    
+  })
+
+
+  /*axios.post('http://127.0.0.1:8080/unsubscribe',  { channel: '2', topic: 'coolxtestwlt' } )
+  .then((res) => {
+    console.log(`statusCode: ${res.data}`)
+    pl.getSubscriptions()
+    
+  })
+  .catch((error) => {
+    console.error("error")
+   
+  })*/
+
 pl.start()
+

@@ -1,28 +1,20 @@
 const ChronicleListener = require('../websockets/ChronicleListener')
-//const ClientListener = require('../websockets/ClientListener')
-//const PostListener = require('../webserver/PostListener')
 const MessageSubscription = require('./MessageSubscription')
 
 class MessageRouter {
 
-    constructor(chroniclePort = 8800, clientPort = 8888) {
+    constructor(chroniclePort = 8800) {
         this.chronicleListener = new ChronicleListener(this, chroniclePort)
-        //this.clientListener = new ClientListener(this, clientPort)
-        //this.postListener = new PostListener()
         this.channels = {}
     }
 
     async start() {
         console.log("MessageRouter starting ChronicleListener")
         await this.chronicleListener.start()
-        //console.log("MessageRouter starting ClientListener")
-        //await this.clientListener.start()
-        //this.postListener.start()
     }
 
     stop() {
         this.chronicleListener.stop()
-        //this.clientListener.stop()
     }
 
     handleMessage(message) {
@@ -70,11 +62,11 @@ class MessageRouter {
         let topic = subscription.getTopic()
         let channel = subscription.getChannel()
         let id = subscription.getId()
-
+        
         if (!this.channels[channel])
             return
 
-        let topicSubscriptions = this.channels[channel].subscriptions[topic]
+        let topicSubscriptions = this.channels[channel][topic]
         if (!topicSubscriptions)
             return
 

@@ -15,6 +15,11 @@ class PostListener {
       this.port = port
       this.mr = new MessageRouter()
       this.chain_id = '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
+      
+      this.subscriptions = {}
+      this.requests = {}
+      this.rpcId = 0
+    
   }
 
   start() {
@@ -22,25 +27,53 @@ class PostListener {
     this.app.listen(this.port)
     this.app.post("/addSubscritpion", this.addSubscritpion.bind(this))
     this.app.post("/addSubscritpionList", this.addSubscritpionList.bind(this))
+    this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
     //this.app.post("/sub2", this.handlePost.bind(this))
   }
 
-  subscribe(account){
+  subscribe(subscription) {
+    if (!subscription.isValid()) {
+        console.error(`Invalid subscription: ${JSON.stringify(subscription)}`)
+        return
+    }
+
+    let channel = subscription.getChannel()
+    let topic = subscription.getTopic()
+    let alreadySubscribed = true
+    if (!this.subscriptions.hasOwnProperty(channel)) {
+        this.subscriptions[channel] = {}
+        alreadySubscribed = false
+    }
+
+    if (!this.subscriptions[channel].hasOwnProperty(topic)) {
+        this.subscriptions[channel][topic] = subscription
+        alreadySubscribed = false
+    }
+
+    if (alreadySubscribed)
+        throw new Error(`Already a subscription for channel ${channel} with topic ${topic}`)
+
+    this.mr.subscribe(subscription)
+
+    console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
+}
+
+  subscribeRegister(account){
     console.log(`subscribe account: ${account}`)
     let subscriptionTransfer = MessageSubscription.transferSubscription(account,this.handler.bind(this))
-    this.mr.subscribe(subscriptionTransfer)
+    this.subscribe(subscriptionTransfer)
   }
 
   addSubscritpion(req, resp) {
-    this.subscribe(req.body.account)
-    resp.end("OK")
+    this.subscribeRegister(req.body.account)
+    resp.end("200")
   }
 
   addSubscritpionList(req, resp) {
     let accounts = req.body.accounts
-    accounts.forEach(data => this.subscribe(data));
-    resp.end("OK")
+    accounts.forEach(data => this.subscribeRegister(data));
+    resp.end("200")
   }
 
   handler(message) {
@@ -57,11 +90,22 @@ class PostListener {
 
   }
 
-  handlePost(req, resp) {
-    //console.log(req.body)
-    //console.log(resp)
-    console.log("here")
-    resp.end("OK")
+  unsubscribe(req, resp) {
+    let { channel, topic } = req.body
+    let subscription = this.getSubscription(channel, topic)
+    resp.end("200")
+
+    delete this.subscriptions[channel][topic]
+    this.mr.unsubscribe(subscription)   
+  }
+
+
+  getSubscription(channel, topic) {
+    return this.subscriptions[channel][topic]
+  }
+
+  getSubscriptions() {
+    console.log(this.subscriptions)
   }
 
 }
