@@ -149,7 +149,21 @@ class ChronicleListener {
                 block_num, block_time, trace, trx_id
             }))
 
-            if (account == 'eosio.token' && name == 'transfer') {
+            var coolxAccounts = [
+                "acornaccount",
+                "eosio.token",
+                "greencointls",
+                "ourbmstokens",
+                "qubicletoken",
+                "revelation21",
+                "stablecarbon",
+                "stablecoin.z",
+                "stablecoinro",
+                "telosdacdrop"
+            ]
+
+            if (coolxAccounts.includes(account) && name == 'transfer') {
+                //console.log(trace)
                 let from = trace.act.data.from
                 let to = trace.act.data.to
                 let quantity = trace.act.data.quantity
@@ -158,6 +172,16 @@ class ChronicleListener {
                 this.messageRouter.handleMessage(new Message(Channels.TRANSFER, from, data))
                 this.messageRouter.handleMessage(new Message(Channels.TRANSFER, to, data))
             }
+
+            /*if (account == 'eosio.token' && name == 'transfer') {
+                let from = trace.act.data.from
+                let to = trace.act.data.to
+                let quantity = trace.act.data.quantity
+                let memo = trace.act.data.memo
+                let data = { from, to, quantity, memo, block_num, block_time, trace, trx_id }
+                this.messageRouter.handleMessage(new Message(Channels.TRANSFER, from, data))
+                this.messageRouter.handleMessage(new Message(Channels.TRANSFER, to, data))
+            }*/
         }
     }
 
