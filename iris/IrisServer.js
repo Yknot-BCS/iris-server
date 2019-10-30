@@ -26,10 +26,10 @@ pl.start()
 
 process.once('SIGINT', function (code) {
     console.log('\nSIGINT received...');
-    mr.stop();
+    pl.stop();
 });
 
 process.once('SIGTERM', function (code) {
     console.log('\nSIGTERM received...');
-    mr.stop();
+    pl.stop();
 });

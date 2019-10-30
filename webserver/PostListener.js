@@ -10,6 +10,7 @@ class PostListener {
   constructor(chronicleport = 8800,  webport = 8080) {
     console.log("PostListener constructor called")
       this.app = express();
+      this.server = this.app.listen(this.port)
       this.app.use(bodyParser.urlencoded({extended: false}))
       this.app.use(bodyParser.json())
       this.port = webport
@@ -20,12 +21,15 @@ class PostListener {
 
   start() {
     console.log(`Start webserver, ${this.port}`)
-    this.app.listen(this.port)
     this.app.post("/addSubscritpion", this.addSubscritpion.bind(this))
     this.app.post("/addSubscritpionList", this.addSubscritpionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
     //this.app.post("/sub2", this.handlePost.bind(this))
+  }
+
+  stop() {
+    this.server.close(()=>{console.log('Process terminated')});
   }
 
   subscribe(subscription) {
