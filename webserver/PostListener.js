@@ -8,7 +8,6 @@ const axios = require('axios')
 class PostListener {
 
   constructor(chronicleport = 8800,  webport = 8080) {
-    console.log("PostListener constructor called")
       this.app = express();
       console.log(`Start webserver, ${webport}`)
       this.server = this.app.listen(webport)

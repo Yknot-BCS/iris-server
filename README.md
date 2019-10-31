@@ -58,3 +58,9 @@ Options
 
   Project home: https://github.com/CALEOS/iris-server
 ```
+
+### Docker
+```
+docker run --rm -t -d -v /telos/chronicle-data:/chronicle-data --network=host --name chronicle-server chronicle-server:v1 
+docker run --rm -t -d -p 3000:3000 -p 8800:8800 --network=host --name iris-server iris-server:v1
+```
