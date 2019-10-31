@@ -10,17 +10,18 @@ class PostListener {
   constructor(chronicleport = 8800,  webport = 8080) {
     console.log("PostListener constructor called")
       this.app = express();
-      this.server = this.app.listen(this.port)
+      console.log(`Start webserver, ${webport}`)
+      this.server = this.app.listen(webport)
       this.app.use(bodyParser.urlencoded({extended: false}))
       this.app.use(bodyParser.json())
-      this.port = webport
+
       this.mr = new MessageRouter(chronicleport)
       this.chain_id = '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
       this.subscriptions = {}
   }
 
   start() {
-    console.log(`Start webserver, ${this.port}`)
+    
     this.app.post("/addSubscritpion", this.addSubscritpion.bind(this))
     this.app.post("/addSubscritpionList", this.addSubscritpionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))

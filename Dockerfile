@@ -2,7 +2,7 @@ FROM node:8
 WORKDIR /usr/src/app
 COPY . .
 RUN npm install
-EXPOSE 3000
+EXPOSE 8080
 EXPOSE 8800
 #RUN nohup node iris/IrisServer.js >> iris-server.log 2>&1 &
 CMD ["node", "iris/IrisServer.js"]

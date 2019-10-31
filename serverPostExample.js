@@ -1,7 +1,7 @@
 const { PostListener } = require('./index')
 const axios = require('axios')
 
-let pl = new PostListener()
+//let pl = new PostListener()
 
 var coolxAccounts = [
   "acornaccount",
@@ -22,7 +22,7 @@ axios.post('http://127.0.0.1:8080/addSubscritpion',  { account: 'coolxtestwlt' }
     
   })
   .catch((error) => {
-    console.error("error")
+    console.error(error)
   })
 
   axios.post('http://127.0.0.1:8080/addSubscritpionList',  { accounts: coolxAccounts } )
@@ -55,5 +55,5 @@ axios.post('http://127.0.0.1:8080/addSubscritpion',  { account: 'coolxtestwlt' }
    
   })*/
 
-pl.start()
+//pl.start()
 
