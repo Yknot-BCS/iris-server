@@ -5,9 +5,15 @@ services:
     ports:
       - "3000:3000"
       - "8800:8800"
+    networks:
+      - chronicle
   chronicle:
     image: "chronicle-server:v1"
-    volumes:
-      - /telos/chronicle-data:/chronicle-data
-    links:
-      - iris
+    #volumes:
+    #  - /telos/chronicle-data:/chronicle-data
+    networks:
+      - chronicle
+
+networks:
+  chronicle:
+      driver: bridge

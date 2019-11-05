@@ -60,7 +60,10 @@ Options
 ```
 
 ### Docker
+NOTE: Make sure docker container is always running unless issued a docker stop command.
 ```
-docker run --rm -t -d -v /telos/chronicle-data:/chronicle-data --network=host --name chronicle-server chronicle-server:v1 
-docker run --rm -t -d -p 3000:3000 -p 8800:8800 --network=host --name iris-server iris-server:v1
+docker run -dit --restart unless-stop -v /telos/chronicle-data:/chronicle-data --network=host --name chronicle-server chronicle-server:v1 
+
+docker run --rm -dit -p 3000:3000 -p 8800:8800 --network=host --name iris-server iris-server:v1
+
 ```
