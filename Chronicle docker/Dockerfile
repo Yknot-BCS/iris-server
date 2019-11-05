@@ -13,4 +13,4 @@ RUN cd eos-chronicle \
 
 COPY config.ini /config.ini
 
-CMD /eos-chronicle/build/chronicle-receiver --config-dir=/ --data-dir=/chronicle-data
+CMD ["/eos-chronicle/build/chronicle-receiver", "--config-dir=/","--data-dir=/chronicle-data"]
