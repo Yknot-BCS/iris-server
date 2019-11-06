@@ -159,7 +159,8 @@ class ChronicleListener {
                 "stablecarbon",
                 "stablecoin.z",
                 "stablecoinro",
-                "telosdacdrop"
+                "telosdacdrop",
+                "zartknissuer"
             ]
 
             if (coolxAccounts.includes(account) && name == 'transfer') {

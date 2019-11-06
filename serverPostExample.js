@@ -1,7 +1,7 @@
 const { PostListener } = require('./index')
 const axios = require('axios')
 
-//let pl = new PostListener()
+let pl = new PostListener()
 
 var coolxAccounts = [
   "acornaccount",
@@ -75,5 +75,5 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
    
   })*/
 
-//pl.start()
+pl.start()
 

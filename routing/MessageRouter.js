@@ -1,12 +1,6 @@
 const ChronicleListener = require('../websockets/ChronicleListener')
 const MessageSubscription = require('./MessageSubscription')
 const fs = require('fs');
-const readline = require('readline');
-const readInterface = readline.createInterface({
-    input: fs.createReadStream('subs.json'),
-    output: process.stdout,
-    console: false
-});
 
 class MessageRouter {
 
@@ -24,16 +18,10 @@ class MessageRouter {
         this.chronicleListener.stop()
     }
 
-    getSubsFile(){
-        readInterface.on('line', function(line) {
-            console.log(line);
-        });
-    }
-
-    writeSub(subscription){
-        fs.appendFile('subs.json', subscription.toJSON() + "\n", (err) => {
+    writeSub(channelsObj){
+        fs.writeFile('subs.json', JSON.stringify(channelsObj), (err) => {
             if (err) throw err;
-            console.log('Data written to file');
+            //console.log('Data written to file');
         });
     }
 
@@ -72,8 +60,9 @@ class MessageRouter {
             channelSubscriptions[topic] = []
 
         channelSubscriptions[topic].push(subscription)
-        console.log(channelSubscriptions)
-        this.writeSub(subscription)
+        console.log('subscription')
+        console.log(subscription)
+        this.writeSub(this.channels)
     }
 
     unsubscribe(subscription) {

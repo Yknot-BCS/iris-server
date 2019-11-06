@@ -23,14 +23,25 @@ let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('zartkn
 mr.subscribe(testSubscriptionTransfer)
 mr.subscribe(testSubscriptionTransfer2)*/
 
-let testSubscription = MessageSubscription.actionSubscription('eosio.token', 'transfer', function (message) {
+let testSubscription1 = MessageSubscription.actionSubscription('eosio.token', 'transfer', function (message) {
   //console.log(`ACTION - eosio.token::transfer message - ${JSON.stringify(message, null, 4)}`)
 })
 
-let testSubscriptionTransfer = MessageSubscription.transferSubscription('zartknissuer', function (message) {
+let testSubscription2 = MessageSubscription.actionSubscription('eosio.token', 'issue', function (message) {
+  //console.log(`ACTION - eosio.token::transfer message - ${JSON.stringify(message, null, 4)}`)
+})
+
+let testSubscriptionTransfer1 = MessageSubscription.transferSubscription('zartknissuer', function (message) {
   //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
 })
 
-mr.subscribe(testSubscription)
-mr.subscribe(testSubscriptionTransfer)
+let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('stablecoin.z', function (message) {
+  //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
+})
+
+mr.subscribe(testSubscription1)
+mr.subscribe(testSubscription2)
+mr.subscribe(testSubscriptionTransfer1)
+mr.subscribe(testSubscriptionTransfer2)
 mr.start()
+//mr.getSubsFile()

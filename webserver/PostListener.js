@@ -25,12 +25,39 @@ class PostListener {
     this.app.post("/addSubscritpionList", this.addSubscritpionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
+    this.getSubsFile()
     //this.app.post("/sub2", this.handlePost.bind(this))
   }
 
   stop() {
     this.server.close(()=>{console.log('Process terminated')});
   }
+
+  getSubsFile(){
+    let channels = require('../subs.json')
+    for(var channel in channels) {
+      let channelSubscriptions = channels[channel]
+      for(var topic in channelSubscriptions)
+      {
+          let subData = JSON.parse(channelSubscriptions[topic])
+          let channel = subData.channel
+          let account = subData.topic
+          switch (channel)
+          {
+            case 1:
+              let data = account.split("::")
+              this.subscribeAction(data[0], data[1])
+              break
+            case 2:
+              this.subscribeTransfer(account)
+              break
+            default:
+                // code block
+          }
+
+      }
+    }
+  } 
 
   subscribe(subscription) {
     if (!subscription.isValid()) {
@@ -57,22 +84,28 @@ class PostListener {
     this.mr.subscribe(subscription)
 
     console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
-}
+  }
 
-  subscribeRegister(account){
+  subscribeAction(contract, action){
+    console.log(`subscribe contract: ${contract}, subscribe action: ${action}`)
+    let subscriptionTransfer = MessageSubscription.actionSubscription(contract, action,this.handler.bind(this))
+    this.subscribe(subscriptionTransfer)
+  }
+
+  subscribeTransfer(account){
     console.log(`subscribe account: ${account}`)
     let subscriptionTransfer = MessageSubscription.transferSubscription(account,this.handler.bind(this))
     this.subscribe(subscriptionTransfer)
   }
 
   addSubscritpion(req, resp) {
-    this.subscribeRegister(req.body.account)
+    this.subscribeTransfer(req.body.account)
     resp.end("200")
   }
 
   addSubscritpionList(req, resp) {
     let accounts = req.body.accounts
-    accounts.forEach(data => this.subscribeRegister(data));
+    accounts.forEach(data => this.subscribeTransfer(data));
     resp.end("200")
   }
 
