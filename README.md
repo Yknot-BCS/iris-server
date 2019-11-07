@@ -64,6 +64,6 @@ NOTE: Make sure docker container is always running unless issued a docker stop c
 ```
 docker run -dit --restart unless-stopped -v /telos/chronicle-data:/chronicle-data --network=host --name chronicle-server chronicle-server:v1 
 
-docker run --rm -dit -p 3000:3000 -p 8800:8800 --network=host --name iris-server iris-server:v1
+docker run --rm -dit --network=host --name iris-server iris-server:v1
 
 ```
