@@ -23,8 +23,8 @@ class PostListener {
 
   start() {
     
-    this.app.post("/addSubscritpion", this.addSubscritpion.bind(this))
-    this.app.post("/addSubscritpionList", this.addSubscritpionList.bind(this))
+    this.app.post("/addSubscription", this.addSubscritpion.bind(this))
+    this.app.post("/addSubscriptionList", this.addSubscritpionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
     this.getSubsFile()
@@ -106,12 +106,12 @@ class PostListener {
     this.subscribe(subscriptionTransfer)
   }
 
-  addSubscritpion(req, resp) {
+  addSubscription(req, resp) {
     this.subscribeTransfer(req.body.account)
     resp.end("200")
   }
 
-  addSubscritpionList(req, resp) {
+  addSubscriptionList(req, resp) {
     let accounts = req.body.accounts
     accounts.forEach(data => this.subscribeTransfer(data));
     resp.end("200")
