@@ -23,8 +23,8 @@ class PostListener {
 
   start() {
     
-    this.app.post("/addSubscription", this.addSubscritpion.bind(this))
-    this.app.post("/addSubscriptionList", this.addSubscritpionList.bind(this))
+    this.app.post("/addSubscription", this.addSubscription.bind(this))
+    this.app.post("/addSubscriptionList", this.addSubscriptionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
     this.getSubsFile()
