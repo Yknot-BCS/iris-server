@@ -5,7 +5,7 @@ const MessageSubscription = require('../routing/MessageSubscription')
 const axios = require('axios')
 const fs = require('fs');
 const path = require('path');
-
+const jwt = require('jsonwebtoken');
 
 class PostListener {
 
@@ -33,6 +33,57 @@ class PostListener {
 
   stop() {
     this.server.close(()=>{console.log('Process terminated')});
+  }
+
+  jwtSign() {
+    let privPath = path.join(__dirname, '..', 'keys', 'private.key');
+    let privateKEY  = fs.readFileSync(privPath, 'utf8');
+    //let publicKEY  = fs.readFileSync('./public.key', 'utf8');
+    /*
+    ====================   JWT Signing =====================
+    */
+    let payload = {
+        "block_num": "354",
+        "account" : "qwertyqwerty",
+        "action" : "transfer",
+        "data": {
+            "from": "crp.tf",
+            "to": "eosio.stake",
+            "quantity": "1.0000 TLOS",
+            "memo": "stake bandwidth"
+        },
+        "trx_id": "626bc95581d3f9c444535f3bbdc8663662d6c3dd9d95127b92f85ee141b10a46",
+        "block_time": "2019-11-01T00:00:02.000"
+    }
+
+    let i  = 'eZAR Corp'   
+    let s  = 'admin@ezar.co.za'  
+    let a  = 'https://ezar.co.za'
+    let signOptions = {
+      issuer:  i,
+      subject:  s,
+      audience:  a,
+      expiresIn:  "1h",
+      algorithm:  "RS512"   // RSASSA [ "RS256", "RS384", "RS512" ]
+    }
+    let token = jwt.sign(payload, privateKEY, signOptions)
+    console.log("Token :" + token)
+
+  }
+
+  jwtVerify() {
+    /*
+    ====================   JWT Verify =====================
+    */
+    const verifyOptions = {
+      issuer:  i,
+      subject:  s,
+      audience:  a,
+      expiresIn:  "12h",
+      algorithm:  ["RS256"]
+    };
+    let legit = jwt.verify(token, publicKEY, verifyOptions);
+    console.log("\nJWT verification result: " + JSON.stringify(legit));
   }
 
   getSubsFile(){

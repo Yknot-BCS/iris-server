@@ -26,7 +26,7 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
    
   })
 
-/*axios.post('http://history.telos.africa:3000/addSubscritpion',  { account: 'coolxtestwlt' } )
+/*axios.post('http://history.telos.africa:3000/addSubscription',  { account: 'coolxtestwlt' } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
     
@@ -35,7 +35,7 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
     console.error(error)
   })*/
 
-  /*axios.post('http://127.0.0.1:8080/addSubscritpionList',  { accounts: coolxAccounts } )
+  /*axios.post('http://127.0.0.1:8080/addSubscriptionList',  { accounts: coolxAccounts } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
     
@@ -44,7 +44,7 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
     console.error("error")
   })
 
-  axios.post('http://127.0.0.1:8080/addSubscritpion',  { account: 'coolxtestwlt' } )
+  axios.post('http://127.0.0.1:8080/addSubscription',  { account: 'coolxtestwlt' } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
   })
@@ -53,7 +53,7 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
     
   })
 
-  axios.post('http://10.0.0.85:3000/addSubscritpion',  { account: 'coolxtestwlt' } )
+  axios.post('http://10.0.0.85:3000/addSubscription',  { account: 'coolxtestwlt' } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
     
@@ -74,6 +74,7 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
     console.error("error")
    
   })*/
+pl.jwtSign()
 
 pl.start()
 
