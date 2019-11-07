@@ -44,4 +44,6 @@ mr.subscribe(testSubscription2)
 mr.subscribe(testSubscriptionTransfer1)
 mr.subscribe(testSubscriptionTransfer2)
 mr.start()
+
+mr.unsubscribe(testSubscription1)
 //mr.getSubsFile()

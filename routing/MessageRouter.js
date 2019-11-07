@@ -60,8 +60,6 @@ class MessageRouter {
             channelSubscriptions[topic] = []
 
         channelSubscriptions[topic].push(subscription)
-        console.log('subscription')
-        console.log(subscription)
         this.writeSub(this.channels)
     }
 
@@ -86,6 +84,8 @@ class MessageRouter {
                 break
             }
         }
+
+        this.writeSub(this.channels)
     }
 }
 

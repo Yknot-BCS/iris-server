@@ -3,7 +3,7 @@ const bodyParser = require("body-parser")
 const MessageRouter = require('../routing/MessageRouter')
 const MessageSubscription = require('../routing/MessageSubscription')
 const axios = require('axios')
-
+const fs = require('fs');
 
 class PostListener {
 
@@ -34,29 +34,34 @@ class PostListener {
   }
 
   getSubsFile(){
-    let channels = require('../subs.json')
-    for(var channel in channels) {
-      let channelSubscriptions = channels[channel]
-      for(var topic in channelSubscriptions)
-      {
-          let subData = JSON.parse(channelSubscriptions[topic])
-          let channel = subData.channel
-          let account = subData.topic
-          switch (channel)
-          {
-            case 1:
-              let data = account.split("::")
-              this.subscribeAction(data[0], data[1])
-              break
-            case 2:
-              this.subscribeTransfer(account)
-              break
-            default:
-                // code block
-          }
+    //let channels = require('../subs.json')
+    fs.readFile('subs.json', (err, data) => {
+      if (err) throw err;
+      let channels = JSON.parse(data);
+          
+      for(var channel in channels) {
+        let channelSubscriptions = channels[channel]
+        for(var topic in channelSubscriptions)
+        {
+            let subData = JSON.parse(channelSubscriptions[topic])
+            let channel = subData.channel
+            let account = subData.topic
+            switch (channel)
+            {
+              case 1:
+                let data = account.split("::")
+                this.subscribeAction(data[0], data[1])
+                break
+              case 2:
+                this.subscribeTransfer(account)
+                break
+              default:
+                  // code block
+            }
 
+        }
       }
-    }
+    });
   } 
 
   subscribe(subscription) {
