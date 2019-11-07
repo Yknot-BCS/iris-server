@@ -4,6 +4,8 @@ const MessageRouter = require('../routing/MessageRouter')
 const MessageSubscription = require('../routing/MessageSubscription')
 const axios = require('axios')
 const fs = require('fs');
+const path = require('path');
+
 
 class PostListener {
 
@@ -35,7 +37,8 @@ class PostListener {
 
   getSubsFile(){
     //let channels = require('../subs.json')
-    fs.readFile('subs.json', (err, data) => {
+    let jsonPath = path.join(__dirname, '..', 'sub_data', 'subs.json');
+    fs.readFile(jsonPath, (err, data) => {
       if (err) throw err;
       let channels = JSON.parse(data);
           

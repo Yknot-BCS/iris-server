@@ -4,4 +4,4 @@ node_modules
 .vscode
 .nyc_output
 coverage
-subs.json
+sub_data

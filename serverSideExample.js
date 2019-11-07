@@ -39,11 +39,11 @@ let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('stable
   //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
 })
 
-mr.subscribe(testSubscription1)
+//mr.subscribe(testSubscription1)
 mr.subscribe(testSubscription2)
 mr.subscribe(testSubscriptionTransfer1)
 mr.subscribe(testSubscriptionTransfer2)
 mr.start()
 
-mr.unsubscribe(testSubscription1)
+//mr.unsubscribe(testSubscription1)
 //mr.getSubsFile()

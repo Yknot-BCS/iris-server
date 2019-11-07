@@ -1,6 +1,7 @@
 const ChronicleListener = require('../websockets/ChronicleListener')
 const MessageSubscription = require('./MessageSubscription')
 const fs = require('fs');
+const path = require('path');
 
 class MessageRouter {
 
@@ -19,7 +20,8 @@ class MessageRouter {
     }
 
     writeSub(channelsObj){
-        fs.writeFile('subs.json', JSON.stringify(channelsObj), (err) => {
+        let jsonPath = path.join(__dirname, '..', 'sub_data', 'subs.json');
+        fs.writeFile(jsonPath, JSON.stringify(channelsObj), (err) => {
             if (err) throw err;
             //console.log('Data written to file');
         });
