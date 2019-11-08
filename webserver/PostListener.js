@@ -36,7 +36,7 @@ class PostListener {
   }
 
   jwtSign() {
-    let privPath = path.join(__dirname, '..', 'keys', 'private.key');
+    let privPath = path.join(__dirname, '..', 'keys', 'jwtRS256.key');
     let privateKEY  = fs.readFileSync(privPath, 'utf8');
     //let publicKEY  = fs.readFileSync('./public.key', 'utf8');
     /*
@@ -68,22 +68,28 @@ class PostListener {
     }
     let token = jwt.sign(payload, privateKEY, signOptions)
     console.log("Token :" + token)
+    this.jwtVerify(token)
 
   }
 
-  jwtVerify() {
+  jwtVerify(token) {
+    let pubPath = path.join(__dirname, '..', 'keys', 'jwtRS256.key.pub');
+    let publicKEY  = fs.readFileSync(pubPath, 'utf8');
     /*
     ====================   JWT Verify =====================
     */
+    let i  = 'eZAR Corp'   
+    let s  = 'admin@ezar.co.za'  
+    let a  = 'https://ezar.co.za'
     const verifyOptions = {
       issuer:  i,
       subject:  s,
       audience:  a,
-      expiresIn:  "12h",
-      algorithm:  ["RS256"]
+      expiresIn:  "1h",
+      algorithm:  ["RS512"]
     };
     let legit = jwt.verify(token, publicKEY, verifyOptions);
-    console.log("\nJWT verification result: " + JSON.stringify(legit));
+    console.log("\nJWT verification result:\n" + JSON.stringify(legit));
   }
 
   getSubsFile(){
