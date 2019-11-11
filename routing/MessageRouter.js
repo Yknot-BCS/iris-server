@@ -87,6 +87,9 @@ class MessageRouter {
             }
         }
 
+        if (this.channels[channel][topic].length == 0) {
+            delete this.channels[channel][topic]
+        }
         this.writeSub(this.channels)
     }
 }

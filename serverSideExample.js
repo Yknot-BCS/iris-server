@@ -1,5 +1,7 @@
 const { MessageRouter, MessageSubscription } = require('./index')
+const { PostListener } = require('./index')
 
+let pl = new PostListener()
 let mr = new MessageRouter()
 
 
@@ -39,11 +41,18 @@ let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('stable
   //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
 })
 
-//mr.subscribe(testSubscription1)
+/*mr.subscribe(testSubscription1)
 mr.subscribe(testSubscription2)
 mr.subscribe(testSubscriptionTransfer1)
 mr.subscribe(testSubscriptionTransfer2)
 mr.start()
 
-//mr.unsubscribe(testSubscription1)
+mr.unsubscribe(testSubscription1)
+mr.unsubscribe(testSubscription2)
+mr.unsubscribe(testSubscriptionTransfer1)
+mr.unsubscribe(testSubscriptionTransfer2)*/
 //mr.getSubsFile()
+
+//pl.start()
+mr.start()
+mr.unsubscribe(testSubscription1)
