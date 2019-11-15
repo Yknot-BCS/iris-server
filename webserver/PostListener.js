@@ -2,10 +2,11 @@ const express = require('express')
 const bodyParser = require("body-parser")
 const MessageRouter = require('../routing/MessageRouter')
 const MessageSubscription = require('../routing/MessageSubscription')
+const JWTService = require('../jwt/JWTService')
 const axios = require('axios')
 const fs = require('fs');
 const path = require('path');
-const jwt = require('jsonwebtoken');
+const jwtEnabled = false
 
 class PostListener {
 
@@ -19,6 +20,7 @@ class PostListener {
       this.mr = new MessageRouter(chronicleport)
       this.chain_id = '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
       this.subscriptions = {}
+      this.jwt = new JWTService()
   }
 
   start() {
@@ -28,68 +30,10 @@ class PostListener {
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
     this.getSubsFile()
-    //this.app.post("/sub2", this.handlePost.bind(this))
   }
 
   stop() {
     this.server.close(()=>{console.log('Process terminated')});
-  }
-
-  jwtSign() {
-    let privPath = path.join(__dirname, '..', 'keys', 'jwtRS256.key');
-    let privateKEY  = fs.readFileSync(privPath, 'utf8');
-    //let publicKEY  = fs.readFileSync('./public.key', 'utf8');
-    /*
-    ====================   JWT Signing =====================
-    */
-    let payload = {
-        "block_num": "354",
-        "account" : "qwertyqwerty",
-        "action" : "transfer",
-        "data": {
-            "from": "crp.tf",
-            "to": "eosio.stake",
-            "quantity": "1.0000 TLOS",
-            "memo": "stake bandwidth"
-        },
-        "trx_id": "626bc95581d3f9c444535f3bbdc8663662d6c3dd9d95127b92f85ee141b10a46",
-        "block_time": "2019-11-01T00:00:02.000"
-    }
-
-    let i  = 'eZAR Corp'   
-    let s  = 'admin@ezar.co.za'  
-    let a  = 'https://ezar.co.za'
-    let signOptions = {
-      issuer:  i,
-      subject:  s,
-      audience:  a,
-      expiresIn:  "1h",
-      algorithm:  "RS512"   // RSASSA [ "RS256", "RS384", "RS512" ]
-    }
-    let token = jwt.sign(payload, privateKEY, signOptions)
-    console.log("Token :" + token)
-    this.jwtVerify(token)
-
-  }
-
-  jwtVerify(token) {
-    let pubPath = path.join(__dirname, '..', 'keys', 'jwtRS256.key.pub');
-    let publicKEY  = fs.readFileSync(pubPath, 'utf8');
-    /*
-    ====================   JWT Verify =====================
-    */
-    let i  = 'eZAR Corp'   
-    let s  = 'admin@ezar.co.za'  
-    let a  = 'https://ezar.co.za'
-    const verifyOptions = {
-      issuer:  i,
-      subject:  s,
-      audience:  a,
-      expiresIn:  "1h",
-      algorithm:  ["RS512"]
-    };
-    let legit = jwt.verify(token, publicKEY, verifyOptions);
-    console.log("\nJWT verification result:\n" + JSON.stringify(legit));
   }
 
   getSubsFile(){
@@ -164,8 +108,21 @@ class PostListener {
   }
 
   addSubscription(req, resp) {
-    this.subscribeTransfer(req.body.account)
-    resp.end("200")
+    if (jwtEnabled) {
+      let verifiedData = this.jwt.verify(req.body.token)
+      if (verifiedData){
+        this.subscribeTransfer(verifiedData.account)
+        resp.end("200")
+      }
+      else {
+        resp.error("Unverified payload")
+      }
+    }
+    else {//JWT disabled
+      this.subscribeTransfer(req.body.account)
+      resp.end("200")
+    }
+    
   }
 
   addSubscriptionList(req, resp) {
@@ -176,15 +133,27 @@ class PostListener {
 
   handler(message) {
     console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
-    let payload = `chainId=${this.chain_id}&transactionId=${message.trx_id}`;
-  
-    axios.post(`https://walletapi.coolx.io/api/v2/Message?${payload}`,  "")
-    .then((res) => {
-      console.log(res.status + " " + res.statusText)
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+    
+    if (message.from == "zartknissuer" || message.to == "zartknissuer") {
+      let payload = this.jwt.sign(message)
+      axios.post(`https://api.ezar.co.za/api/v1/Transaction/Notify`,  payload)
+      .then((res) => {
+        console.log(res.status + " " + res.statusText)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    }
+    else{
+      let payload = `chainId=${this.chain_id}&transactionId=${message.trx_id}`;
+      axios.post(`https://walletapi.coolx.io/api/v2/Message?${payload}`,  "")
+      .then((res) => {
+        console.log(res.status + " " + res.statusText)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    }
 
   }
 

@@ -1,8 +1,9 @@
 const { PostListener } = require('./index')
+const JWTService = require('./jwt/JWTService')
 const axios = require('axios')
 
 let pl = new PostListener()
-
+let jwt = new JWTService()
 var coolxAccounts = [
   "acornaccount",
   "eosio.token",
@@ -16,7 +17,7 @@ var coolxAccounts = [
   "telosdacdrop"
 ]
 
-axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topic: 'coolxtestwlt' } )
+/*axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topic: 'coolxtestwlt' } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
    
@@ -24,7 +25,7 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
   .catch((error) => {
     console.error(error)
    
-  })
+  })*/
 
 /*axios.post('http://history.telos.africa:3000/addSubscription',  { account: 'coolxtestwlt' } )
   .then((res) => {
@@ -34,17 +35,21 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
   .catch((error) => {
     console.error(error)
   })*/
-
-  /*axios.post('http://127.0.0.1:8080/addSubscriptionList',  { accounts: coolxAccounts } )
+  
+  /*let payload = { accounts: coolxAccounts }
+  let token = jwt.sign(payload)
+  axios.post('http://127.0.0.1:8080/addSubscriptionList',  token )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
     
   })
   .catch((error) => {
     console.error("error")
-  })
+  })*/
 
-  axios.post('http://127.0.0.1:8080/addSubscription',  { account: 'coolxtestwlt' } )
+  let payload = { account: 'coolxtestwlt' }
+  let token = jwt.sign(payload)
+  axios.post('http://127.0.0.1:8080/addSubscription',  { token } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
   })
@@ -53,14 +58,14 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
     
   })
 
-  axios.post('http://10.0.0.85:3000/addSubscription',  { account: 'coolxtestwlt' } )
+  /*axios.post('http://10.0.0.85:3000/addSubscription',  { account: 'coolxtestwlt' } )
   .then((res) => {
     console.log(`statusCode: ${res.data}`)
     
   })
   .catch((error) => {
     console.error(error)
-  })*/
+  })
 
 
 
@@ -74,7 +79,6 @@ axios.post('http://history.telos.africa:3000/unsubscribe',  { channel: '2', topi
     console.error("error")
    
   })*/
-pl.jwtSign()
 
 pl.start()
 
