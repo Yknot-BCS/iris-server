@@ -1,7 +1,5 @@
 const ChronicleListener = require('../websockets/ChronicleListener')
 const MessageSubscription = require('./MessageSubscription')
-const fs = require('fs');
-const path = require('path');
 
 class MessageRouter {
 
@@ -17,14 +15,6 @@ class MessageRouter {
 
     stop() {
         this.chronicleListener.stop()
-    }
-
-    writeSub(channelsObj){
-        let jsonPath = path.join(__dirname, '..', 'sub_data', 'subs.json');
-        fs.writeFile(jsonPath, JSON.stringify(channelsObj), (err) => {
-            if (err) throw err;
-            //console.log('Data written to file');
-        });
     }
 
     handleMessage(message) {
@@ -62,7 +52,6 @@ class MessageRouter {
             channelSubscriptions[topic] = []
 
         channelSubscriptions[topic].push(subscription)
-        this.writeSub(this.channels)
     }
 
     unsubscribe(subscription) {
@@ -90,7 +79,6 @@ class MessageRouter {
         if (this.channels[channel][topic].length == 0) {
             delete this.channels[channel][topic]
         }
-        this.writeSub(this.channels)
     }
 }
 

@@ -93,7 +93,7 @@ class ChronicleListener {
                     _this._blockCompleted(msgSubstringed)
                     break
                 default:
-                    console.error("Unknown code: " + code);
+                    //console.error("Unknown code: " + code);
             }
 
             if (_this.lastBlock - _this.lastAck >= _this.ackInterval)

@@ -4,9 +4,7 @@ const MessageRouter = require('../routing/MessageRouter')
 const MessageSubscription = require('../routing/MessageSubscription')
 const JWTService = require('../jwt/JWTService')
 const axios = require('axios')
-const fs = require('fs');
-const path = require('path');
-const jwtEnabled = false
+const jwtEnabled = false //for verifcation only
 
 class PostListener {
 
@@ -29,44 +27,23 @@ class PostListener {
     this.app.post("/addSubscriptionList", this.addSubscriptionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
     this.mr.start()
-    this.getSubsFile()
+    this.getAccountListFromAPI()
   }
 
   stop() {
     this.server.close(()=>{console.log('Process terminated')});
   }
 
-  getSubsFile(){
-    //let channels = require('../subs.json')
-    let jsonPath = path.join(__dirname, '..', 'sub_data', 'subs.json');
-    fs.readFile(jsonPath, (err, data) => {
-      if (err) throw err;
-      let channels = JSON.parse(data);
-          
-      for(var channel in channels) {
-        let channelSubscriptions = channels[channel]
-        for(var topic in channelSubscriptions)
-        {
-            let subData = JSON.parse(channelSubscriptions[topic])
-            let channel = subData.channel
-            let account = subData.topic
-            switch (channel)
-            {
-              case 1:
-                let data = account.split("::")
-                this.subscribeAction(data[0], data[1])
-                break
-              case 2:
-                this.subscribeTransfer(account)
-                break
-              default:
-                  // code block
-            }
-
-        }
+  getAccountListFromAPI() {
+    axios.get('https://walletapi.coolx.io/api/v2/account/list').then(
+      (response) => {
+        let accounts = response.data.accounts
+        accounts.forEach(data => this.subscribeTransfer(data));
       }
-    });
-  } 
+    ).catch((error) => {
+      console.error(error)
+    })
+  }
 
   subscribe(subscription) {
     if (!subscription.isValid()) {
@@ -97,13 +74,13 @@ class PostListener {
 
   subscribeAction(contract, action){
     console.log(`subscribe contract: ${contract}, subscribe action: ${action}`)
-    let subscriptionTransfer = MessageSubscription.actionSubscription(contract, action,this.handler.bind(this))
+    let subscriptionTransfer = MessageSubscription.actionSubscription(contract, action, this.handler.bind(this))
     this.subscribe(subscriptionTransfer)
   }
 
   subscribeTransfer(account){
     console.log(`subscribe account: ${account}`)
-    let subscriptionTransfer = MessageSubscription.transferSubscription(account,this.handler.bind(this))
+    let subscriptionTransfer = MessageSubscription.transferSubscription(account, this.handler.bind(this))
     this.subscribe(subscriptionTransfer)
   }
 
@@ -133,22 +110,27 @@ class PostListener {
 
   handler(message) {
     console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
-    
+    //Send to EZAR API
     if (message.from == "zartknissuer" || message.to == "zartknissuer") {
       let payload = this.jwt.sign(message)
-      axios.post(`https://api.ezar.co.za/api/v1/Transaction/Notify`,  payload)
+      /*let config = {
+        headers: {
+          contentType: 'application/json'
+        }
+      }*/
+      axios.post(`https://api.ezar.co.za/api/v1/Transaction/Notify`, payload)
       .then((res) => {
-        console.log(res.status + " " + res.statusText)
+        console.log(`https://api.ezar.co.za/api/v1/Transaction/Notify: ${res.status} and ${res.statusText}`)
       })
       .catch((error) => {
         console.error(error)
       })
     }
-    else{
+    else{ //Send to COOLX API
       let payload = `chainId=${this.chain_id}&transactionId=${message.trx_id}`;
       axios.post(`https://walletapi.coolx.io/api/v2/Message?${payload}`,  "")
       .then((res) => {
-        console.log(res.status + " " + res.statusText)
+        console.log(`https://walletapi.coolx.io/api/v2/Message?: ${res.status} and ${res.statusText}`)
       })
       .catch((error) => {
         console.error(error)
@@ -163,7 +145,8 @@ class PostListener {
     resp.end("200")
 
     delete this.subscriptions[channel][topic]
-    this.mr.unsubscribe(subscription)   
+    this.mr.unsubscribe(subscription)
+    console.log(`Unsubscribe request for channel ${channel} and topic ${topic}`)
   }
 
 
@@ -172,7 +155,7 @@ class PostListener {
   }
 
   getSubscriptions() {
-    console.log(this.subscriptions)
+    return this.subscriptions
   }
 
 }
