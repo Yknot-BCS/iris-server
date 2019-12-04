@@ -47,7 +47,7 @@ var coolxAccounts = [
     console.error("error")
   })*/
 
-  let payload = { account: 'coolxtestwlt' }
+  /*let payload = { account: 'coolxtestwlt' }
   let token = jwt.sign(payload)
   axios.post('http://127.0.0.1:8080/addSubscription',  { token } )
   .then((res) => {
@@ -56,7 +56,7 @@ var coolxAccounts = [
   .catch((error) => {
     console.error("error")
     
-  })
+  })*/
 
   /*axios.post('http://10.0.0.85:3000/addSubscription',  { account: 'coolxtestwlt' } )
   .then((res) => {

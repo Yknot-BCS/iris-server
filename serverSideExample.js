@@ -1,5 +1,7 @@
 const { MessageRouter, MessageSubscription } = require('./index')
 const { PostListener } = require('./index')
+const util = require('util')
+
 
 let pl = new PostListener()
 let mr = new MessageRouter()
@@ -41,6 +43,18 @@ let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('stable
   //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
 })
 
+let testSubscriptionAction = MessageSubscription.actionSubscription('zar.tbn', 'result', function (message) {
+ // console.log(message)
+  //console.log(message.trace.act.data)
+
+  //console.log(util.inspect(myObject, {showHidden: false, depth: null}))
+
+  // alternative shortcut
+  console.log(util.inspect(message, false, null, true /* enable colors */))
+  //console.log(`ACTION - zar.tbn::result message - ${message}`)
+  //console.log(`ACTION - zar.tbn::result message - ${message.trace.act.data.name}`)
+})
+
 /*mr.subscribe(testSubscription1)
 mr.subscribe(testSubscription2)
 mr.subscribe(testSubscriptionTransfer1)
@@ -55,4 +69,5 @@ mr.unsubscribe(testSubscriptionTransfer2)*/
 
 //pl.start()
 mr.start()
-mr.unsubscribe(testSubscription1)
+mr.subscribe(testSubscriptionAction)
+//mr.unsubscribe(testSubscription1)

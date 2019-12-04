@@ -26,6 +26,16 @@ class PostListener {
     this.app.post("/addSubscription", this.addSubscription.bind(this))
     this.app.post("/addSubscriptionList", this.addSubscriptionList.bind(this))
     this.app.post("/unsubscribe", this.unsubscribe.bind(this))
+    this.app.post("/addAction", this.addAction.bind(this))
+
+    //Hardcoded for now
+    this.subscribeAction("zar.tbn", "result")
+    this.subscribeAction("qbe.tbn", "result")
+    this.subscribeAction("dac.tbn", "result")
+    this.subscribeAction("rev.tbn", "result")
+    this.subscribeAction("sql.tbn", "result")
+    this.subscribeAction("san.tbn", "result")
+
     this.mr.start()
     this.getAccountListFromAPI()
   }
@@ -74,7 +84,7 @@ class PostListener {
 
   subscribeAction(contract, action){
     console.log(`subscribe contract: ${contract}, subscribe action: ${action}`)
-    let subscriptionTransfer = MessageSubscription.actionSubscription(contract, action, this.handler.bind(this))
+    let subscriptionTransfer = MessageSubscription.actionSubscription(contract, action, this.bancorHandler.bind(this))
     this.subscribe(subscriptionTransfer)
   }
 
@@ -82,6 +92,11 @@ class PostListener {
     console.log(`subscribe account: ${account}`)
     let subscriptionTransfer = MessageSubscription.transferSubscription(account, this.handler.bind(this))
     this.subscribe(subscriptionTransfer)
+  }
+
+  addAction(req, resp) {
+    this.subscribeAction(req.body.contract, req.body.action)
+    resp.end("200")
   }
 
   addSubscription(req, resp) {
@@ -136,7 +151,20 @@ class PostListener {
         console.error(error)
       })
     }
+  }
 
+  bancorHandler(message) {
+    console.log(`Action - message - ${JSON.stringify(message)}`)
+    //Send to BANCOR API on COOLX
+    let payload = this.jwt.sign(message)
+    //console.log(`Action - jwt - ${payload}`)
+    axios.post(`https://us-central1-coolx-242811.cloudfunctions.net/processTrade`, payload)
+    .then((res) => {
+      console.log(`https://us-central1-coolx-242811.cloudfunctions.net/processTrade: ${res.status} and ${res.statusText}`)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
   }
 
   unsubscribe(req, resp) {
