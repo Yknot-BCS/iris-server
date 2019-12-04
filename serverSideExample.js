@@ -1,8 +1,11 @@
-const { MessageRouter, MessageSubscription, PostListener } = require('./index')
-const axios = require('axios')
+const { MessageRouter, MessageSubscription } = require('./index')
+const { PostListener } = require('./index')
+const util = require('util')
 
-//let mr = new MessageRouter()
+
 let pl = new PostListener()
+let mr = new MessageRouter()
+
 
 /*let testSubscription = MessageSubscription.actionSubscription('stablecoin.z', 'transfer', function (message) {
     console.log(`ACTION - eosio.token::issue message - ${JSON.stringify(message, null, 4)}`)
@@ -24,43 +27,47 @@ let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('zartkn
 mr.subscribe(testSubscriptionTransfer)
 mr.subscribe(testSubscriptionTransfer2)*/
 
-let testSubscription = MessageSubscription.actionSubscription('stablecoin.z', 'transfer', function (message) {
-  //console.log(`ACTION - eosio.token::issue message - ${JSON.stringify(message, null, 4)}`)
-  axios.post('http://127.0.0.1:8080/sub',  message )
-  .then((res) => {
-    console.log(`statusCode: ${res.statusCode}`)
-    //console.log(res)
-  })
-  .catch((error) => {
-    console.error("error")
-  })
+let testSubscription1 = MessageSubscription.actionSubscription('eosio.token', 'transfer', function (message) {
+  //console.log(`ACTION - eosio.token::transfer message - ${JSON.stringify(message, null, 4)}`)
 })
 
-let testSubscriptionTransfer = MessageSubscription.transferSubscription('zartknissuer', function (message) {
-  console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
-  let chain_id = '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
-
-  let payload = `chainId=${chain_id}&transactionId=${message.trx_id}`;
-  
-  axios.post(`https://walletapi.coolx.io/api/v2/Message?${payload}`,  "")
-  .then((res) => {
-    console.log(res.status + " " + res.statusText)
-  })
-  .catch((error) => {
-    console.error(error)
-  })
+let testSubscription2 = MessageSubscription.actionSubscription('eosio.token', 'issue', function (message) {
+  //console.log(`ACTION - eosio.token::transfer message - ${JSON.stringify(message, null, 4)}`)
 })
 
-/*axios.post('http://127.0.0.1:8080/addSubscritpion',  'zartknissuer' )
-  .then((res) => {
-    //console.log(`statusCode: ${res.statusCode}`)
-    console.log(res)
-  })
-  .catch((error) => {
-    console.error("error")
-  })*/
-//mr.subscribe(testSubscription)
-//mr.subscribe(testSubscriptionTransfer)
+let testSubscriptionTransfer1 = MessageSubscription.transferSubscription('zartknissuer', function (message) {
+  //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
+})
 
-//mr.start()
-pl.start()
+let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('stablecoin.z', function (message) {
+  //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
+})
+
+let testSubscriptionAction = MessageSubscription.actionSubscription('zar.tbn', 'result', function (message) {
+ // console.log(message)
+  //console.log(message.trace.act.data)
+
+  //console.log(util.inspect(myObject, {showHidden: false, depth: null}))
+
+  // alternative shortcut
+  console.log(util.inspect(message, false, null, true /* enable colors */))
+  //console.log(`ACTION - zar.tbn::result message - ${message}`)
+  //console.log(`ACTION - zar.tbn::result message - ${message.trace.act.data.name}`)
+})
+
+/*mr.subscribe(testSubscription1)
+mr.subscribe(testSubscription2)
+mr.subscribe(testSubscriptionTransfer1)
+mr.subscribe(testSubscriptionTransfer2)
+mr.start()
+
+mr.unsubscribe(testSubscription1)
+mr.unsubscribe(testSubscription2)
+mr.unsubscribe(testSubscriptionTransfer1)
+mr.unsubscribe(testSubscriptionTransfer2)*/
+//mr.getSubsFile()
+
+//pl.start()
+mr.start()
+mr.subscribe(testSubscriptionAction)
+//mr.unsubscribe(testSubscription1)

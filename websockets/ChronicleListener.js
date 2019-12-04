@@ -93,7 +93,7 @@ class ChronicleListener {
                     _this._blockCompleted(msgSubstringed)
                     break
                 default:
-                    console.error("Unknown code: " + code);
+                    //console.error("Unknown code: " + code);
             }
 
             if (_this.lastBlock - _this.lastAck >= _this.ackInterval)
@@ -134,7 +134,7 @@ class ChronicleListener {
             return
 
         let block_num = msgObj.block_num
-        let block_time = msgObj.block_time
+        let block_time = msgObj.block_timestamp
         let trx_id = msgObj.trace.id
         for (var i = 0; i < msgObj.trace.action_traces.length; i++) {
             let trace = msgObj.trace.action_traces[i]
@@ -148,7 +148,7 @@ class ChronicleListener {
             this.messageRouter.handleMessage(new Message(Channels.ACTION, topic, {
                 block_num, block_time, trace, trx_id
             }))
-
+            //TODO: Creat function to set these accounts
             var coolxAccounts = [
                 "acornaccount",
                 "eosio.token",
@@ -168,7 +168,7 @@ class ChronicleListener {
                 let to = trace.act.data.to
                 let quantity = trace.act.data.quantity
                 let memo = trace.act.data.memo
-                let data = { from, to, quantity, memo, block_num, block_time, trace, trx_id }
+                let data = { from, to, quantity, memo, block_num, block_time, trace, trx_id, account, name }
                 this.messageRouter.handleMessage(new Message(Channels.TRANSFER, from, data))
                 this.messageRouter.handleMessage(new Message(Channels.TRANSFER, to, data))
             }

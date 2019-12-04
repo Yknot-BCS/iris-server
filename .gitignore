@@ -4,3 +4,5 @@ node_modules
 .vscode
 .nyc_output
 coverage
+sub_data
+keys

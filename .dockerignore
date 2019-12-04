@@ -2,7 +2,6 @@ README.md
 LICENSE
 .gitignore
 Chronicle*docker/
-.gitignore
 mechanicsWatcher.js
 serverPostExample.js
 serverSideExample.js

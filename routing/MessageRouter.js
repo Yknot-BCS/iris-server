@@ -75,6 +75,10 @@ class MessageRouter {
                 break
             }
         }
+
+        if (this.channels[channel][topic].length == 0) {
+            delete this.channels[channel][topic]
+        }
     }
 }
 
