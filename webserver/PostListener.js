@@ -1,3 +1,4 @@
+const config = require('../config');
 const express = require('express')
 const bodyParser = require("body-parser")
 const MessageRouter = require('../routing/MessageRouter')
@@ -19,6 +20,9 @@ class PostListener {
       this.chain_id = '4667b205c6838ef70ff7988f6e8257e8be0e1284a2f59699054a018f743b1d11'
       this.subscriptions = {}
       this.jwt = new JWTService()
+      this.ezar_url = config.ezar_url;
+      this.coolx_url = config.coolx_url;
+
   }
 
   start() {
@@ -35,6 +39,8 @@ class PostListener {
     this.subscribeAction("rev.tbn", "result")
     this.subscribeAction("sql.tbn", "result")
     this.subscribeAction("san.tbn", "result")
+    this.subscribeEzarAction("zar", "trxreport")
+    
 
     this.mr.start()
     this.getAccountListFromAPI()
@@ -88,6 +94,12 @@ class PostListener {
     this.subscribe(subscriptionTransfer)
   }
 
+  subscribeEzarAction(contract, action){
+    console.log(`subscribe contract: ${contract}, subscribe action: ${action}`)
+    let subscriptionTransfer = MessageSubscription.actionSubscription(contract, action, this.ezarHandler.bind(this))
+    this.subscribe(subscriptionTransfer)
+  }
+
   subscribeTransfer(account){
     console.log(`subscribe account: ${account}`)
     let subscriptionTransfer = MessageSubscription.transferSubscription(account, this.handler.bind(this))
@@ -133,9 +145,9 @@ class PostListener {
           contentType: 'application/json'
         }
       }*/
-      axios.post(`https://api.ezar.co.za/api/v1/Transaction/Notify`, payload)
+      axios.post(`${this.ezar_url}api/v1/Transaction/Notify`, payload)
       .then((res) => {
-        console.log(`https://api.ezar.co.za/api/v1/Transaction/Notify: ${res.status} and ${res.statusText}`)
+        console.log(`${this.ezar_url}api/v1/Transaction/Notify: ${res.status} and ${res.statusText}`)
       })
       .catch((error) => {
         console.error(error)
@@ -161,6 +173,21 @@ class PostListener {
     axios.post(`https://us-central1-coolx-242811.cloudfunctions.net/processTrade`, payload)
     .then((res) => {
       console.log(`https://us-central1-coolx-242811.cloudfunctions.net/processTrade: ${res.status} and ${res.statusText}`)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+
+  ezarHandler(message) {
+    //https://dev.api.ezar.co.za/api/v1/wallet/PostMessage?MessageType=0&AccountName=virtual_acountname
+    console.log(`Action - message - ${JSON.stringify(message)}`)
+    //Send to EZAR API
+    let payload = this.jwt.sign(message)
+    //console.log(`Action - jwt - ${payload}`)
+    axios.post(`${this.ezar_url}api/v1/wallet/PostMessage`, payload)
+    .then((res) => {
+      console.log(`${this.ezar_url}api/v1/wallet/PostMessage: ${res.status} and ${res.statusText}`)
     })
     .catch((error) => {
       console.error(error)

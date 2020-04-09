@@ -43,7 +43,7 @@ let testSubscriptionTransfer2 = MessageSubscription.transferSubscription('stable
   //console.log(`TRANSFER - message - ${JSON.stringify(message)}`)
 })
 
-let testSubscriptionAction = MessageSubscription.actionSubscription('zar.tbn', 'result', function (message) {
+let testSubscriptionAction3 = MessageSubscription.actionSubscription('zar.tbn', 'result', function (message) {
  // console.log(message)
   //console.log(message.trace.act.data)
 
@@ -54,6 +54,10 @@ let testSubscriptionAction = MessageSubscription.actionSubscription('zar.tbn', '
   //console.log(`ACTION - zar.tbn::result message - ${message}`)
   //console.log(`ACTION - zar.tbn::result message - ${message.trace.act.data.name}`)
 })
+
+let testSubscriptionAction = MessageSubscription.actionSubscription('zar', 'trxreport', function (message) {
+   console.log(util.inspect(message, false, null, true /* enable colors */))
+ })
 
 /*mr.subscribe(testSubscription1)
 mr.subscribe(testSubscription2)
