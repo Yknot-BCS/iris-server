@@ -4,8 +4,9 @@ const MessageSubscription = require('./routing/MessageSubscription')
 const MessageRouter = require('./routing/MessageRouter')
 const ClientListener = require('./websockets/ClientListener')
 const ChronicleListener = require('./websockets/ChronicleListener')
-const PostListener = require('./webserver/PostListener')
+const CoolxPostListener = require('./webserver/CoolxPostListener')
+const EzarPostListener = require('./webserver/EzarPostListener')
 
 module.exports = {
-  Message, Channels, MessageSubscription, MessageRouter, ClientListener, ChronicleListener, PostListener
+  Message, Channels, MessageSubscription, MessageRouter, ClientListener, ChronicleListener, CoolxPostListener, EzarPostListener
 }

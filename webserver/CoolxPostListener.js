@@ -6,7 +6,7 @@ const JWTService = require('../jwt/JWTService')
 const axios = require('axios')
 const jwtEnabled = false //for verifcation only
 
-class PostListener {
+class CoolxPostListener {
 
   constructor(chronicleport = 8800,  webport = 8080) {
       this.app = express();
@@ -187,4 +187,4 @@ class PostListener {
   }
 
 }
-module.exports = PostListener
+module.exports = CoolxPostListener
