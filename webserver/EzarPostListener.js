@@ -29,10 +29,6 @@ class EzarPostListener {
     //Hardcoded for now
     this.subscribeAction("zar", "trxreport")
     this.subscribeAction("stablecoin.z","transfer")
-    
-    
-    //this.mr.start()
-    //this.getAccountListFromAPI()
   }
 
   stop() {
