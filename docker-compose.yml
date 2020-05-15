@@ -5,8 +5,7 @@ services:
     container_name: iris
     ports:
       - "3000:3000"
-      - "8800:8800"
-      - "8801:8801"
+      - "3001:3001"
     networks:
       - chronicle
   chronicle:
