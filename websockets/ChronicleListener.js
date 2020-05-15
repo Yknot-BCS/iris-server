@@ -148,6 +148,7 @@ class ChronicleListener {
             this.messageRouter.handleMessage(new Message(Channels.ACTION, topic, {
                 block_num, block_time, trace, trx_id
             }))
+            
             //TODO: Creat function to set these accounts
             var coolxAccounts = [
                 "acornaccount",

@@ -4,7 +4,7 @@
 // configure ports without creating a javascript file
 
 //const MessageRouter = require('../routing/MessageRouter')
-const { PostListener } = require('../index')
+const { CoolXPostListener, EzarPostListener } = require('../index')
 const optionsDef = require('./IrisOptions')
 const commandLineArgs = require('command-line-args')
 const commandLineUsage = require('command-line-usage')
@@ -21,15 +21,20 @@ const webport = isNaN(options['web-port']) ? 8080 : options['web-port']
 //const clientListenerPort = isNaN(options['web-port']) ? 8880 : options['web-port']
 //let mr = new MessageRouter(chronicleListenerPort)
 //mr.start()
-let pl = new PostListener(chronicleListenerPort, webport)
-pl.start()
+let coolx = new CoolXPostListener(chronicleListenerPort, webport)
+coolx.start()
+
+let ezar = new EzarPostListener(chronicleListenerPort, webport)
+coolx.start(ezar)
 
 process.once('SIGINT', function (code) {
     console.log('\nSIGINT received...');
-    pl.stop();
+    coolx.stop();
+    ezar.stop();
 });
 
 process.once('SIGTERM', function (code) {
     console.log('\nSIGTERM received...');
-    pl.stop();
+    coolx.stop();
+    ezar.stop();
 });

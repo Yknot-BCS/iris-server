@@ -1,9 +1,9 @@
 const { MessageRouter, MessageSubscription } = require('./index')
-const { PostListener } = require('./index')
+const { CoolxPostListener } = require('./index')
 const util = require('util')
 
 
-let pl = new PostListener()
+let coolx = new CoolxPostListener()
 let mr = new MessageRouter()
 
 

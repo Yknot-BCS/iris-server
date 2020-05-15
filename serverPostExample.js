@@ -1,8 +1,10 @@
-const { PostListener } = require('./index')
+const { CoolxPostListener, EzarPostListener } = require('./index')
 const JWTService = require('./jwt/JWTService')
 const axios = require('axios')
 
-let pl = new PostListener()
+let coolx = new CoolxPostListener()
+let ezar = new EzarPostListener()
+
 let jwt = new JWTService()
 var coolxAccounts = [
   "acornaccount",
@@ -80,5 +82,6 @@ var coolxAccounts = [
    
   })*/
 
-pl.start()
+coolx.start()
+ezar.start()
 
