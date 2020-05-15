@@ -70,7 +70,7 @@ class EzarPostListener {
 
     this.mr.subscribe(subscription)
 
-    console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
+    //console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
   }
 
   subscribeAction(contract, action){

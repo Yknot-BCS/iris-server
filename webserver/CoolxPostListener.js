@@ -83,7 +83,7 @@ class CoolxPostListener {
 
     this.mr.subscribe(subscription)
 
-    console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
+    //console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
   }
 
   subscribeAction(contract, action){
@@ -99,7 +99,7 @@ class CoolxPostListener {
   }
 
   subscribeTransfer(account){
-    console.log(`subscribe account: ${account}`)
+    //console.log(`subscribe account: ${account}`)
     let subscriptionTransfer = MessageSubscription.transferSubscription(account, this.handler.bind(this))
     this.subscribe(subscriptionTransfer)
   }
