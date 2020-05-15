@@ -6,8 +6,7 @@ services:
     ports:
       - "3000:3000"
       - "3001:3001"
-    networks:
-      - chronicle
+    network_mode: "host"
   chronicle:
     build: 
       context: "./Chronicle\ docker/"
@@ -16,9 +15,4 @@ services:
     volumes:
       - /telos/chronicle-data:/chronicle-data
     restart: unless-stopped
-    networks:
-      - chronicle
-
-networks:
-  chronicle:
-      driver: bridge
+    network_mode: "host"
