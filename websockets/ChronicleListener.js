@@ -152,16 +152,28 @@ class ChronicleListener {
             //TODO: Creat function to set these accounts
             var coolxAccounts = [
                 "acornaccount",
+                "cordobatoken",
+                "ddatemintone",
+                "ecoin1nation",
                 "eosio.token",
                 "greencointls",
+                "lord",
                 "ourbmstokens",
+                "persiandaric",
                 "qubicletoken",
                 "revelation21",
-                "stablecarbon",
+                "sandiegocoin",
+                "sesacashmain",
+                "sqrlwalletio",
                 "stablecoin.z",
                 "stablecoinro",
+                "steemontelos",
+                "telokandaone",
                 "telosdacdrop",
-                "thecooltoken"
+                "telostaskapp",
+                "thecooltoken",
+                "token.seeds",
+                "vapaeetokens"
             ]
 
             if (coolxAccounts.includes(account) && name == 'transfer') {
