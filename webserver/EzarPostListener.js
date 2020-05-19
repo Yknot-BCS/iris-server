@@ -35,17 +35,6 @@ class EzarPostListener {
     this.server.close(()=>{console.log('Process terminated')});
   }
 
-  /*getAccountListFromAPI() {
-    axios.get('https://walletapi.coolx.io/api/v2/account/list').then(
-      (response) => {
-        let accounts = response.data.accounts
-        accounts.forEach(data => this.subscribeTransfer(data));
-      }
-    ).catch((error) => {
-      console.error(error)
-    })
-  }*/
-
   subscribe(subscription) {
     if (!subscription.isValid()) {
         console.error(`Invalid subscription: ${JSON.stringify(subscription)}`)
