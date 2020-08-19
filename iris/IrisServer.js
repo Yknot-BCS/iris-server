@@ -53,5 +53,6 @@ process.once('SIGTERM', function (code) {
     console.log('\nSIGTERM received...');
     coolx.stop();
     ezar.stop();
+    blacq.stop();
     process.exit(1);
 });
