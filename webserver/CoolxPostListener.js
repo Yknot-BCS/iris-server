@@ -9,7 +9,7 @@ const jwtEnabled = false //for verifcation only
 
 class CoolxPostListener {
 
-  constructor(messageRouter, chronicleport = 8800,  webport = 8080) {
+  constructor(messageRouter, webport = 8080) {
       this.app = express();
       console.log(`Start webserver, ${webport}`)
       this.server = this.app.listen(webport)
@@ -41,7 +41,7 @@ class CoolxPostListener {
     this.subscribeAction("san.tbn", "result")
     this.subscribeEzarAction("zar", "trxreport")
     
-    this.getAccountListFromAPI()
+    //this.getAccountListFromAPI()
   }
 
   stop() {
@@ -83,7 +83,7 @@ class CoolxPostListener {
 
     this.mr.subscribe(subscription)
 
-    //console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
+    console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
   }
 
   subscribeAction(contract, action){
@@ -99,7 +99,7 @@ class CoolxPostListener {
   }
 
   subscribeTransfer(account){
-    //console.log(`subscribe account: ${account}`)
+    console.log(`subscribe account: ${account}`)
     let subscriptionTransfer = MessageSubscription.transferSubscription(account, this.handler.bind(this))
     this.subscribe(subscriptionTransfer)
   }
@@ -148,7 +148,7 @@ class CoolxPostListener {
         console.log(`${this.ezar_url}api/v1/Transaction/Notify: ${res.status} and ${res.statusText}`)
       })
       .catch((error) => {
-        console.error(error)
+        console.error(error.response)
       })
     }
     else{ //Send to COOLX API
@@ -158,7 +158,7 @@ class CoolxPostListener {
         console.log(`https://walletapi.coolx.io/api/v2/Message?: ${res.status} and ${res.statusText}`)
       })
       .catch((error) => {
-        console.error(error)
+        console.error(error.response)
       })
     }
   }
@@ -173,7 +173,7 @@ class CoolxPostListener {
       console.log(`https://us-central1-coolx-242811.cloudfunctions.net/processTrade: ${res.status} and ${res.statusText}`)
     })
     .catch((error) => {
-      console.error(error)
+      console.error(error.response)
     })
   }
 
@@ -188,7 +188,7 @@ class CoolxPostListener {
       console.log(`${this.ezar_url}api/v1/wallet/PostMessage: ${res.status} and ${res.statusText}`)
     })
     .catch((error) => {
-      console.error(error)
+      console.error(error.response)
     })
   }
 

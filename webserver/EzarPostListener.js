@@ -9,7 +9,7 @@ const jwtEnabled = false //for verifcation only
 
 class EzarPostListener {
 
-  constructor(messageRouter, chronicleport = 8800,  webport = 8081) {
+  constructor(messageRouter, webport = 8081) {
       this.app = express();
       console.log(`Start webserver, ${webport}`)
       this.server = this.app.listen(webport)
@@ -29,6 +29,10 @@ class EzarPostListener {
     //Hardcoded for now
     this.subscribeAction("zar", "trxreport")
     this.subscribeAction("stablecoin.z","transfer")
+    
+    
+    //this.mr.start()
+    //this.getAccountListFromAPI()
   }
 
   stop() {
@@ -59,7 +63,7 @@ class EzarPostListener {
 
     this.mr.subscribe(subscription)
 
-    //console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
+    console.log(`Sent subscription request for channel ${channel} and topic ${topic}`)
   }
 
   subscribeAction(contract, action){
@@ -82,19 +86,19 @@ class EzarPostListener {
         console.log(`${this.ezar_url}api/v1/Transaction/Notify: ${res.status} and ${res.statusText}`)
       })
       .catch((error) => {
-        console.error(error.data)
+        console.error(error.response)
       })
   }
 
   actionHandler(message) {
     console.log(`ACTION - message - ${JSON.stringify(message)}`)
     let payload = this.jwt.sign(message)
-    axios.post(`${this.ezar_url}api/v1/wallet/PostPaymentMessage?`, payload)
+    axios.post(`${this.ezar_url}api/v1/wallet/PostPaymentMessage`, payload)
     .then((res) => {
       console.log(`${this.ezar_url}api/v1/wallet/PostPaymentMessage: ${res.status} and ${res.statusText}`)
     })
     .catch((error) => {
-      console.error(error.data)
+      console.error(error.response)
     })
 
     axios.post(`${this.ezar_url}api/v1/Transaction/Notify`, payload)
@@ -102,7 +106,7 @@ class EzarPostListener {
       console.log(`${this.ezar_url}api/v1/Transaction/Notify: ${res.status} and ${res.statusText}`)
     })
     .catch((error) => {
-      console.error(error)
+      console.error(error.response)
     })
   }
 
