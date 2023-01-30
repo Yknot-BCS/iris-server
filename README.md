@@ -6,7 +6,7 @@ Setup a node with state-history enabled running `1.8.1` or newer (this assumes t
 
 ### Chronicle
 
-Follow instructions to run https://github.com/EOSChronicleProject/eos-chronicle on Ubuntu 18.10, use the master branch which supports nodeos 1.8.1.
+Follow instructions to run <https://github.com/EOSChronicleProject/eos-chronicle> on Ubuntu 18.10, use the master branch which supports nodeos 1.8.1.
 
 There is a `docker` directory in this repository that contains a `Dockerfile` and `config.ini` that can be used to run chronicle in docker.
 
@@ -60,13 +60,27 @@ Options
 ```
 
 ### Docker
+
 NOTE: Make sure docker container is always running unless issued a docker stop command.
-```
+
+```bash
 docker run -dit --restart unless-stopped -v /telos/chronicle-data:/chronicle-data --network=host --name chronicle-server chronicle-server:v1 
 docker run --rm -dit --network=host --name iris-server iris-server:v1
 
 Development
 docker run --rm -dit --name iris-server -p 3000:3000 -p 8800:8800 iris-server:v1
-docker run --rm -dit --network=host --name chronicle-server chronicle-server:dev 
+docker run --rm -dit --network=host --name chronicle-server chronicle-server:latest 
 
 ```
+
+### Keys
+
+```bash
+mkdir keys
+```
+
+```bash
+ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
+```
+
+Make sure to copy the public key to the API server in `WatcherRS512PublicKey` in `/var/netcore/ezar/api/`
