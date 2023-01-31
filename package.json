@@ -1,6 +1,5 @@
 {
   "name": "chronicle-filter",
-  "type": "module",
   "version": "1.0.0",
   "description": "Filter for Chronicle",
   "main": "index.js",
