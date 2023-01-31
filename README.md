@@ -81,6 +81,7 @@ mkdir keys
 
 ```bash
 ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
+openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 ```
 
 Make sure to copy the public key to the API server in `WatcherRS512PublicKey` in `/var/netcore/ezar/api/`
